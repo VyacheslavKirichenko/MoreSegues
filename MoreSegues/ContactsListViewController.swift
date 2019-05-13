@@ -14,23 +14,20 @@ class ContactsListViewController: UIViewController, UITableViewDelegate, UITable
         Contact(image: nil, name: "Kate", phone: "(888) 123 5412")
     ]
     var contact: Contact?
-    var selectedItem = 0
+   // var selectedItem = 0
     var myContact: Contact = Contact(image: nil, name: "Irina", phone: "(111) 333 1234")
     
     @IBAction func addBtn(_ sender: Any) {
         performSegue(withIdentifier: "toAdd", sender: sender)
-        
     }
-    
-    
     @IBAction func popAction(_ sender: Any) {
         performSegue(withIdentifier: "toPopover", sender: sender)
     }
-    
-    
     @IBAction func goBack(segue: UIStoryboardSegue) {
     tableView?.reloadData()
     }
+     @IBOutlet weak var tableView: UITableView?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,33 +47,23 @@ class ContactsListViewController: UIViewController, UITableViewDelegate, UITable
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsCell", for: indexPath)
         let contact = contacts[indexPath.row]
         cell.textLabel?.text = contact.name
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return ""
     }
-    
-    @IBOutlet weak var tableView: UITableView?
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//
+//    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        guard let selectedPath = tableView?.indexPathForSelectedRow else { return }
-//        if let target = segue.destination as? DetailContactViewController {
-//            target.contact = contacts[selectedPath.row]
-//        } else
         if segue.identifier == "toDetail" {
+            guard let selectedPath = tableView?.indexPathForSelectedRow else { return }
             if let detailViewController = segue.destination as? DetailContactViewController {
-                detailViewController.contact = contacts[selectedItem]
-                
+                detailViewController.contact = contacts[selectedPath.row]
             }
         }
-        
-        
             if segue.identifier == "toPopover" {
             if let detailVievController = segue.destination as? DetailContactViewController{
                 detailVievController.contact = myContact
@@ -85,7 +72,6 @@ class ContactsListViewController: UIViewController, UITableViewDelegate, UITable
                 }
             }
         }
-        
     }
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
